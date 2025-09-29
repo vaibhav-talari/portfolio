@@ -60,3 +60,42 @@ footer {
   color: #fff;
   margin-top: 2rem;
 }
+
+.button {
+  display: inline-block;
+  padding: 15px 25px;
+  font-size: 24px;
+  cursor: pointer;
+  text-align: center;
+  text-decoration: none;
+  color: #fff;
+  background-color: #04AA6D;
+  border: none;
+  border-radius: 15px;
+  box-shadow: 0 9px #999;
+  margin: 0 10px; /* spacing between buttons */
+}
+
+.button:active {
+  box-shadow: 0 5px #666;
+  transform: translateY(4px);
+}
+
+.center {
+  display: flex;
+  flex-direction: column; /* stack vertically */
+  justify-content: center;   /* center horizontally */
+  align-items: center;       /* center vertically */
+  height: 100vh;             /* full viewport height */
+  border: 3px solid green; 
+  gap: 100px;                 /* modern way to add space between flex items */
+}
+
+.center2 {
+  display: flex;
+  justify-content: center;   /* center horizontally */
+  align-items: center;       /* center vertically */
+  height: 100vh;             /* full viewport height */
+  border: 3px solid green; 
+  gap: 100px;                 /* modern way to add space between flex items */
+}

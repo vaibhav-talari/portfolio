@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Click Counter</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="center">
+  <!-- Increment button -->
+  <button class="button" onclick="incrementCounter()">Increment</button>
+
+  <!-- Counter display -->
+  <p id="counterText">You clicked <span id="count">0</span> times.</p>
+
+  <!-- Reset button -->
+  <button class="button" onclick="resetCounter()">Reset</button>
+
+  <!-- Decrement button -->
+  <button class="button" onclick="decrementCounter()">Decrement</button>
+</div>
+
+<script>
+  // Load saved count or default to 0
+  let count = parseInt(localStorage.getItem("clicks")) || 0;
+  document.getElementById("count").innerText = count;
+
+  function incrementCounter() {
+    count++;
+    localStorage.setItem("clicks", count);
+    document.getElementById("count").innerText = count;
+  }
+
+  function decrementCounter() {
+    if (count != 0) {
+    count--;
+    localStorage.setItem("clicks", count);
+    document.getElementById("count").innerText = count;
+    }
+  }
+
+  function resetCounter() {
+    count = 0;
+    localStorage.setItem("clicks", count);
+    document.getElementById("count").innerText = count;
+  }
+</script>
+
+</body>
+</html>

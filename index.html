@@ -11,8 +11,10 @@
     <nav>
       <h1>Vaibhav Talari</h1>
       <ul>
+	<!-- in href # refers to same page section-->
         <li><a href="#about">About</a></li>
         <!--<li><a href="#projects">Projects</a></li>-->
+	<li><a href="counter.html">Tools</a></li>
         <li><a href="#contact">Contact</a></li>
       </ul>
     </nav>
@@ -22,7 +24,6 @@
     <h2>About Me</h2>
     <p>Hi, I’m Vaibhav, a software developer passionate about building impactful digital products. I bring a goal-oriented, analytical, and problem-solving mindset to complex technical challenges, with industry experience in Java and Microservices development and extensive use of design patterns. I am proficient in multiple programming languages, including Java, Python, C, Golang, and Bash, and skilled with technologies such as Spring, Kubernetes, AWS (EC2, S3, Lambda, KMS), and Azure (Service Bus, Blob Storage). My experience extends to a wide range of tools, including Spring Boot, Maven, Git, Docker, Flink, Kafka, MySQL, MongoDB, Postman, Jenkins, Splunk, Kibana, Power BI, Power Apps, and Power Automate. Having collaborated in Agile teams that follow Scrum, I am now seeking an opportunity to apply and expand my technical expertise in a dynamic and challenging environment.</p>
   </section>
-
 <!--
   <section id="projects">
     <h2>Projects</h2>
@@ -46,5 +47,16 @@
 	  <img src="https://skillicons.dev/icons?i=github" />
 	</a>
   </section>
+
+<button onclick="incrementCounter()">Click me</button>
+  <p>You clicked <span id="count">0</span> times.</p>
+<script>
+    let count = 0;
+    function incrementCounter() {
+      count++;
+      document.getElementById("count").innerText = count;
+    }
+  </script>
 </body>
+
 </html>
