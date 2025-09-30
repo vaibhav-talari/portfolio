@@ -99,3 +99,76 @@ footer {
   border: 3px solid green; 
   gap: 100px;                 /* modern way to add space between flex items */
 }
+
+#experience, #education {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 2rem;
+  font-family: Arial, sans-serif;
+  }
+  
+  
+  #experience h2, #education h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  }
+
+.timeline-left {
+flex: 0 0 100px;
+text-align: right;
+font-weight: bold;
+color: #555;
+}
+
+
+.timeline-right {
+flex: 1;
+}
+
+
+.experience-block {
+background: #f9f9f9;
+border-radius: 8px;
+padding: 1rem 1.5rem;
+box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+
+.experience-block h3 {
+margin-top: 0;
+margin-bottom: 0.5rem;
+color: #333;
+}
+
+
+details {
+margin-top: 0.5rem;
+cursor: pointer;
+}
+
+
+details summary {
+font-weight: bold;
+color: #0077cc;
+margin-bottom: 0.5rem;
+}
+
+
+details[open] summary {
+margin-bottom: 0.5rem;
+}
+
+
+.skills {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap; /* allows wrapping to new lines */
+  max-width: 100%; /* keeps it responsive */
+  padding: 10px;
+}
+
+.skills img {
+  max-width: 100%;
+  height: auto;
+}
