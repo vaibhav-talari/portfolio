@@ -1,0 +1,242 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dice Throw — HTML + CSS + JS</title>
+  <style>
+    :root{
+      --size: 140px;
+      --dot-size: 16px;
+      --accent: #222;
+      --bg: linear-gradient(180deg,#f7f7f8,#e9eef8);
+    }
+
+    html,body{height:100%;}
+    body{
+      margin:0;
+      display:grid;
+      place-items:center;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:var(--bg);
+      color:var(--accent);
+    }
+
+    .stage{
+      width:min(520px,90vw);
+      display:flex;
+      gap:28px;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      text-align:center;
+      padding:28px;
+      border-radius:16px;
+      box-shadow:0 6px 28px rgba(16,24,40,0.12);
+      background:rgba(255,255,255,0.6);
+      backdrop-filter:blur(6px);
+    }
+
+    .scene{
+      height:calc(var(--size) * 1.2);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      perspective:900px;
+      width:100%;
+    }
+
+    /* The die itself */
+    .die{
+      width:var(--size);
+      height:var(--size);
+      border-radius:16px;
+      background:linear-gradient(180deg,#fff,#f0f3ff);
+      box-shadow:0 12px 30px rgba(16,24,40,0.18), inset 0 -6px 14px rgba(0,0,0,0.04);
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      grid-template-rows:repeat(3,1fr);
+      gap:6px;
+      padding:10px;
+      transform-style:preserve-3d;
+      transition:transform 900ms cubic-bezier(.2,.9,.3,1);
+      cursor:pointer;
+      user-select:none;
+      position:relative;
+    }
+
+    /* subtle drop shadow */
+    .die::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      bottom:-18px;
+      transform:translateX(-50%);
+      width:calc(var(--size) * 0.8);
+      height:12px;
+      border-radius:50%;
+      filter:blur(6px);
+      background:linear-gradient(90deg, rgba(0,0,0,0.12), rgba(0,0,0,0.06));
+      opacity:0.9;
+    }
+
+    .dot{
+      width:var(--dot-size);
+      height:var(--dot-size);
+      background:var(--accent);
+      border-radius:50%;
+      margin:auto;
+      opacity:0; /* hidden by default */
+      transform:scale(0.8);
+      transition:opacity 160ms ease, transform 160ms ease;
+      box-shadow:0 2px 4px rgba(0,0,0,0.18);
+    }
+
+    /* position of the 9 possible pip slots are the 9 grid cells (nth-child 1..9) */
+
+    /* mapping of faces to which dots are visible */
+    .die[data-value="1"] .dot:nth-child(5){opacity:1; transform:scale(1);} /* center */
+
+    .die[data-value="2"] .dot:nth-child(1),
+    .die[data-value="2"] .dot:nth-child(9){opacity:1; transform:scale(1);}
+
+    .die[data-value="3"] .dot:nth-child(1),
+    .die[data-value="3"] .dot:nth-child(5),
+    .die[data-value="3"] .dot:nth-child(9){opacity:1; transform:scale(1);}
+
+    .die[data-value="4"] .dot:nth-child(1),
+    .die[data-value="4"] .dot:nth-child(3),
+    .die[data-value="4"] .dot:nth-child(7),
+    .die[data-value="4"] .dot:nth-child(9){opacity:1; transform:scale(1);}
+
+    .die[data-value="5"] .dot:nth-child(1),
+    .die[data-value="5"] .dot:nth-child(3),
+    .die[data-value="5"] .dot:nth-child(5),
+    .die[data-value="5"] .dot:nth-child(7),
+    .die[data-value="5"] .dot:nth-child(9){opacity:1; transform:scale(1);}
+
+    .die[data-value="6"] .dot:nth-child(1),
+    .die[data-value="6"] .dot:nth-child(4),
+    .die[data-value="6"] .dot:nth-child(7),
+    .die[data-value="6"] .dot:nth-child(3),
+    .die[data-value="6"] .dot:nth-child(6),
+    .die[data-value="6"] .dot:nth-child(9){opacity:1; transform:scale(1);}
+
+    /* throw animation (movement across the stage + spins) */
+    @keyframes throw {
+      0%{ transform: translate(0,0) rotate(0deg) rotateX(0deg) rotateY(0deg); }
+      30%{ transform: translate(160px,-120px) rotate(720deg) rotateX(540deg) rotateY(360deg); }
+      65%{ transform: translate(-60px,20px) rotate(1080deg) rotateX(720deg) rotateY(720deg); }
+      100%{ transform: translate(0,0) rotate(1260deg) rotateX(810deg) rotateY(900deg); }
+    }
+
+    .throwing{
+      animation: throw 900ms cubic-bezier(.25,.9,.2,1);
+    }
+
+    .controls{
+      display:flex;
+      gap:12px;
+      align-items:center;
+      justify-content:center;
+      margin-top:6px;
+      flex-wrap:wrap;
+    }
+
+    button{
+      appearance:none;
+      border:0;
+      padding:10px 16px;
+      border-radius:10px;
+      background:linear-gradient(180deg,#3a7bfd,#2856d6);
+      color:white;
+      font-weight:600;
+      cursor:pointer;
+      box-shadow:0 8px 18px rgba(41,80,255,0.18);
+    }
+
+    .info{font-size:14px; color:#445;}
+
+    /* small responsive tweak */
+    @media (max-width:420px){
+      :root{--size:110px; --dot-size:12px}
+    }
+  </style>
+</head>
+<body>
+  <main class="stage" role="main">
+    <h1>Throw the die</h1>
+    <div class="scene">
+      <div id="die" class="die" role="img" aria-label="Die showing 1" tabindex="0" data-value="1">
+        <!-- 9 dot slots (3x3) -->
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+        <span class="dot"></span>
+      </div>
+    </div>
+
+    <div class="controls">
+      <button id="rollBtn">Roll</button>
+      <div class="info">Click or press <kbd>Enter</kbd> on the die to throw it.</div>
+    </div>
+  </main>
+
+  <script>
+    (function(){
+      const die = document.getElementById('die');
+      const btn = document.getElementById('rollBtn');
+      let busy = false;
+
+      function randomInt(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+      function roll(){
+        if(busy) return;
+        busy = true;
+
+        // choose random face 1..6
+        const value = randomInt(1,6);
+
+        // for visual fun add a quick random tilt using CSS transform during spin by toggling class
+        die.classList.remove('throwing');
+
+        // Force reflow so animation restarts reliably
+        void die.offsetWidth;
+
+        // set the value so the pips for the result are ready to be seen
+        die.setAttribute('data-value', String(value));
+        die.setAttribute('aria-label', 'Die showing ' + value);
+
+        // add throwing animation
+        die.classList.add('throwing');
+
+        // when animation ends, remove class and clear busy
+        die.addEventListener('animationend', function handler(){
+          die.classList.remove('throwing');
+          busy = false;
+          die.removeEventListener('animationend', handler);
+        });
+      }
+
+      btn.addEventListener('click', roll);
+      die.addEventListener('click', roll);
+
+      // keyboard accessibility: Enter or Space
+      die.addEventListener('keydown', (e)=>{
+        if(e.key === 'Enter' || e.key === ' '){
+          e.preventDefault();
+          roll();
+        }
+      });
+
+      // start showing a random face on load
+      die.setAttribute('data-value', String(randomInt(1,6)));
+    })();
+  </script>
+</body>
+</html>
